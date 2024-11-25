@@ -1,0 +1,11 @@
+/* frontend/src/components/UploadForm.css */
+.upload-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.upload-icon {
+  color: #3498db;
+}

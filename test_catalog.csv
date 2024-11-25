@@ -1,0 +1,11 @@
+product_name,product_id,color,size,material,category,price
+Classic T-Shirt,TS001,White,M,Cotton,,19.99
+Slim Fit Jeans,JN002,,32,Denim,Bottoms,59.99
+Leather Jacket,JK003,Black,,,Outerwear,199.99
+Running Shoes,SH004,Blue,10,,Footwear,89.99
+Wool Sweater,SW005,Gray,L,,,79.99
+Summer Dress,DR006,Floral,,Polyester,Women's Clothing,49.99
+Hiking Backpack,BP007,Green,,,,129.99
+Smartwatch,WT008,Silver,,,,249.99
+Yoga Mat,YM009,Purple,,,Fitness Equipment,29.99
+Coffee Maker,CM010,Stainless Steel,,,Kitchen Appliances,89.99

@@ -1,0 +1,11 @@
+product_name,product_id,color,size,material,category,price,enhanced_description,care_instructions,suggested_accessories
+Classic T-Shirt,TS001,White,M,Cotton,Topwear,19.99,Premium cotton t-shirt perfect for everyday wear,Machine wash cold, pair with jeans
+Slim Fit Jeans,JN002,Blue,32,Denim,Bottoms,59.99,Stylish slim fit jeans with durable denim fabric,Machine wash cold, belt recommended
+Leather Jacket,JK003,Black,L,Leather,Outerwear,199.99,High-quality leather jacket for a bold look,Dry clean only, pair with boots
+Running Shoes,SH004,Blue,10,Synthetic,Footwear,89.99,Comfortable running shoes designed for performance,Bright colors need gentle cleaning,sports socks
+Wool Sweater,SW005,Gray,L,Wool,Topwear,79.99,Warm wool sweater ideal for cold seasons,Dry clean, no stretching
+Summer Dress,DR006,Floral,S,Polyester,Women's Clothing,49.99,Lightweight summer dress with a beautiful floral pattern,Machine wash cold, sun hat
+Hiking Backpack,BP007,Green,One Size,Polyester,Accessories,129.99,Spacious hiking backpack with multiple compartments,Dry clean, laces replacement
+Smartwatch,WT008,Silver,One Size,Metal,Electronics,249.99,High-tech smartwatch with multiple health tracking features,Keep away from water,lanyard strap
+Yoga Mat,YM009,Purple,One Size,FOAM,Fitness Equipment,29.99,Non-slip yoga mat for all types of yoga practices,Wipe clean with mild detergent, carrying strap
+Coffee Maker,CM010,Stainless Steel,One Size,Metal,Kitchen Appliances,89.99,Automatic coffee maker with programmable settings,Descale regularly, use recommended filters

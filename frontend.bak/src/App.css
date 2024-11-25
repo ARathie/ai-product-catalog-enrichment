@@ -1,0 +1,18 @@
+/* frontend/src/App.css */
+
+.App {
+  display: flex;
+}
+
+.main-content {
+  margin-left: 250px; /* Width of the sidebar */
+  padding: 20px;
+  width: calc(100% - 250px); /* This needs to account for padding */
+  box-sizing: border-box; /* Add this to include padding in width calculation */
+  background-color: #ecf0f1;
+  min-height: 100vh;
+}
+
+button {
+  text-transform: none;
+}

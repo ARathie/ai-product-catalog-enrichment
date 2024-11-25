@@ -1,0 +1,86 @@
+/* frontend/src/components/ProductPairings.css */
+
+.product-pairings-container {
+  padding: 20px;
+}
+
+.button-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pairings-table-container {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.pairings-table {
+  min-width: 650px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.MuiTableCell-root {
+  padding: 8px 16px;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+.pairings-table .MuiTableCell-root {
+  display: table-cell;
+}
+
+.pairing-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.save-button {
+  margin-left: 8px;
+}
+
+.edit-button,
+.save-button {
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.pairing-container:hover .edit-button,
+.pairing-container:hover .save-button {
+  visibility: visible;
+}
+
+.save-button {
+  margin-left: 8px;
+}
+
+.edit-button,
+.save-button {
+  cursor: pointer;
+}
+
+.edit-input {
+  flex: 1;
+  padding-right: 8px;
+}
+
+.cell-text {
+  flex: 1;
+}
+
+/* Responsive Styles */
+@media (max-width: 960px) {
+  .pairings-table {
+    min-width: 500px;
+  }
+
+  .pairings-table .MuiTableCell-root {
+    font-size: 0.875rem;
+  }
+} 

@@ -1,0 +1,10 @@
+/* frontend/src/components/LoadingSpinner.css */
+.loading-card {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+}
+
+.loading-text {
+  font-size: 1.1rem;
+  color: #2c3e50;
+}

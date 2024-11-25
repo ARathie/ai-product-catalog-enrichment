@@ -1,0 +1,74 @@
+[
+  {
+    "product_name": "Classic T-Shirt",
+    "product_id": "TS001",
+    "color": "",
+    "size": "M",
+    "material": "Cotton",
+    "category": "Topwear",
+    "price": "19.99"
+  },
+  {
+    "product_name": "Slim Fit Jeans",
+    "product_id": "JN002",
+    "color": "Blue",
+    "size": "32",
+    "material": "",
+    "category": "Bottoms",
+    "price": "59.99"
+  },
+  {
+    "product_name": "Leather Jacket",
+    "product_id": "JK003",
+    "color": "Black",
+    "size": "L",
+    "material": "Leather",
+    "category": "Topwear",
+    "price": "199.99"
+  },
+  {
+    "product_name": "Running Shoes",
+    "product_id": "SH004",
+    "color": "",
+    "size": "10",
+    "material": "Synthetic",
+    "category": "Accessories",
+    "price": "89.99"
+  },
+  {
+    "product_name": "Winter Coat",
+    "product_id": "WC005",
+    "color": "Grey",
+    "size": "XL",
+    "material": "",
+    "category": "Topwear",
+    "price": "149.99"
+  },
+  {
+    "product_name": "Summer Shorts",
+    "product_id": "SS006",
+    "color": "Beige",
+    "size": "S",
+    "material": "",
+    "category": "Sportswear",
+    "price": "29.99"
+  },
+  {
+    "product_name": "Formal Shirt",
+    "product_id": "FS007",
+    "color": "",
+    "size": "M",
+    "material": "Silk",
+    "category": "Formalwear",
+    "price": "49.99"
+  },
+  {
+    "product_name": "Casual Sneakers",
+    "product_id": "CS008",
+    "color": "White",
+    "size": "9",
+    "material": "",
+    "category": "Accessories",
+    "price": "39.99"
+  }
+]

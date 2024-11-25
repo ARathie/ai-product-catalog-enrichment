@@ -1,0 +1,22 @@
+[
+  {
+    "product_name": "Classic White Shirt",
+    "pairings": ["Blue Jeans", "Leather Belt", "Brown Loafers"]
+  },
+  {
+    "product_name": "Blue Denim Jeans",
+    "pairings": ["White T-Shirt", "Black Sneakers", "Gray Hoodie"]
+  },
+  {
+    "product_name": "Leather Belt",
+    "pairings": ["Black Dress Shoes", "Formal Trousers", "Silk Tie"]
+  },
+  {
+    "product_name": "Brown Loafers",
+    "pairings": ["Khaki Chinos", "Casual Shirt", "Wristwatch"]
+  },
+  {
+    "product_name": "Silk Tie",
+    "pairings": ["Formal Suit", "Dress Shirt", "Oxford Shoes"]
+  }
+]

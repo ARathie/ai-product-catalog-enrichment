@@ -1,0 +1,12 @@
+/* frontend/src/index.css */
+
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #ecf0f1;
+}
+
+h2 {
+  margin-bottom: 20px;
+}

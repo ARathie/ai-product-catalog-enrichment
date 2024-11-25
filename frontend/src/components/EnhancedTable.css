@@ -1,0 +1,628 @@
+/* frontend/src/components/EnhancedTable.css */
+
+/* Move these highlight styles to the top of the file and make them more specific */
+.MuiTableCell-root.new-attribute,
+.MuiTableCell-root.highlight,
+.MuiTableCell-root.highlight-filled {
+  background-color: #d4edda !important;
+}
+
+/* Add a subtle transition for smoother highlighting */
+.MuiTableCell-root {
+  transition: background-color 0.2s ease;
+}
+
+/* Base table styles */
+.enhanced-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Base table cell styles */
+.MuiTableCell-root {
+  padding: 12px 16px;
+  border-bottom: 1px solid #edf2f7;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  min-width: 100px;
+  line-height: 1.5;
+}
+
+/* Specific column widths */
+.column-product_name {
+  min-width: 200px;
+  width: 250px;
+}
+
+.column-enhanced_description {
+  min-width: 300px;
+  width: 350px;
+}
+
+.column-category {
+  min-width: 120px;
+  width: 150px;
+}
+
+.column-color, .column-material {
+  min-width: 120px;
+  width: 120px;
+}
+
+.column-care_instructions, .column-tags, .column-color_synonyms {
+  min-width: 150px;
+  width: 200px;
+}
+
+/* Header cell styles */
+.MuiTableHead-root .MuiTableCell-root {
+  font-weight: bold;
+  background-color: #fafafa;
+}
+
+/* Container for edit mode */
+.edit-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Container for view mode */
+.view-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Style for the edit button, initially hidden */
+.edit-button {
+  visibility: hidden;
+  margin-left: auto;
+}
+
+/* Show the edit button when the cell is hovered */
+.MuiTableCell-root:hover .edit-button {
+  visibility: visible;
+}
+
+/* Style for the save button */
+.save-button {
+  margin-left: 8px;
+}
+
+/* Style for the input field in edit mode */
+.edit-input {
+  flex: 1;
+  padding-right: 8px;
+}
+
+/* Style for the cell text */
+.cell-text {
+  flex: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .MuiTableCell-root {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 960px) {
+  .MuiTableCell-root {
+    padding: 8px;
+    font-size: 0.875rem;
+  }
+
+  .column-product_name {
+    max-width: 200px;
+  }
+
+  .column-enhanced_description {
+    max-width: 250px;
+  }
+}
+
+/* Style for cells in editing mode */
+.editing-cell .MuiInputBase-root {
+  margin: -8px;
+  height: 24px;
+  font-size: inherit;
+}
+
+.editing-cell .MuiInputBase-input {
+  padding: 0 8px;
+  height: 24px;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+/* Remove TextField padding */
+.editing-cell {
+  padding: 16px !important;
+}
+
+/* Maintain consistent border and focus styles */
+.editing-cell .MuiInputBase-root {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.editing-cell .MuiInputBase-root:hover {
+  border-color: #80bdff;
+  background-color: rgba(0, 0, 0, 0.01);
+}
+
+.editing-cell .MuiInputBase-root.Mui-focused {
+  border-color: #1976d2;
+  background-color: rgba(0, 0, 0, 0.02);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+/* Search bar styles */
+.search-input {
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.search-input.Mui-focused {
+  background-color: #fff;
+}
+
+/* Add some spacing between search and table */
+.MuiTableContainer-root {
+  margin-top: 16px;
+}
+
+.highlight-filled {
+  background-color: rgba(212, 237, 218, 0.5);
+}
+
+.new-attribute {
+  background-color: rgba(212, 237, 218, 0.3);
+}
+
+.detail-field {
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.detail-field .MuiTypography-subtitle2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Maintain consistent heights */
+.MuiTableCell-root {
+  height: 48px;
+}
+
+/* Style for TextField in editing mode */
+.detail-field .MuiInputBase-root {
+  background-color: white;
+}
+
+/* Hover effects */
+.detail-field:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Remove unnecessary padding and margins to eliminate gaps */
+
+/* Remove extra padding from TableRow */
+.MuiTableRow-root {
+  &:last-child td, &:last-child th {
+    border: 0;
+  }
+}
+
+/* Adjust padding in collapsed content */
+.detail-field {
+  padding: 8px;
+  border-radius: 4px;
+}
+
+/* Adjust Collapse box margin to remove gaps */
+.MuiCollapse-root {
+  margin: 0 !important;
+}
+
+/* Ensure consistent row height */
+.MuiTableCell-root {
+  padding: 8px 16px;
+  height: auto;
+}
+
+/* Optional: Adjust the margin inside Collapse if needed */
+.Box {
+  margin: 0 !important;
+}
+
+/* Style for Buttons within expanded row */
+.detail-field .MuiButton-root {
+  margin-top: 16px;
+}
+
+/* Optional: Adjust the margin inside Collapse if needed */
+.table-wrapper {
+  margin-top: 16px;
+}
+
+/* Remove extra padding and borders */
+.MuiTableRow-root {
+  border-bottom: none;
+}
+
+.MuiTableCell-root {
+  padding: 8px 16px;
+  height: auto;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
+
+/* Collapse styling */
+.MuiCollapse-root {
+  margin: 0 !important;
+}
+
+.Box {
+  margin: 0 !important;
+}
+
+/* Remove margins and padding from TableRow if necessary */
+.MuiTableRow-root {
+  margin: 0;
+  padding: 0;
+}
+
+.MuiTableContainer-root {
+  background: var(--surface);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+}
+
+/* Header styling */
+.MuiTableHead-root .MuiTableCell-root {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--border);
+}
+
+/* Row styling */
+.MuiTableRow-root {
+  transition: background-color 0.2s ease;
+}
+
+.MuiTableRow-root:hover {
+  background-color: var(--background);
+}
+
+/* Expanded content styling */
+.detail-field {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.detail-field:hover {
+  border-color: var(--primary-light);
+}
+
+/* Icons */
+.enhancement-icon {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+/* Loading spinner */
+.MuiCircularProgress-root {
+  color: var(--primary) !important;
+}
+
+/* Button styling */
+.MuiButton-containedPrimary {
+  background-color: var(--primary) !important;
+  color: white !important;
+  transition: all 0.2s ease !important;
+}
+
+.MuiButton-containedPrimary:hover {
+  background-color: var(--primary-dark) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Detail fields in expanded rows */
+.detail-field {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.detail-field:hover {
+  border-color: var(--primary-light);
+}
+
+/* Table row hover effect */
+.MuiTableRow-root:hover {
+  background-color: var(--background);
+}
+
+/* Icons */
+.enhancement-icon {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+/* Loading spinner */
+.MuiCircularProgress-root {
+  color: var(--primary) !important;
+}
+
+.enhanced-icon {
+  margin-left: 8px;
+  color: var(--primary);
+  opacity: 0.8;
+  vertical-align: middle;
+}
+
+/* Improve table container styling */
+.MuiTableContainer-root {
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+  margin-top: 24px;
+}
+
+/* Enhanced table header styling */
+.MuiTableHead-root .MuiTableCell-root {
+  background-color: #fafafa;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #edf2f7;
+  padding: 16px;
+}
+
+/* Improve row styling and hover states */
+.MuiTableRow-root {
+  transition: background-color 0.2s ease;
+}
+
+.MuiTableRow-root:hover {
+  background-color: #f8fafc;
+}
+
+/* Enhanced cell styling */
+.MuiTableCell-root {
+  padding: 12px 16px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+/* Style for expanded content */
+.detail-field {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 8px 0;
+  transition: all 0.2s ease;
+}
+
+.detail-field:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Enhanced icon styling */
+.enhanced-icon {
+  color: #4f46e5;
+  opacity: 0.8;
+  margin-left: 8px;
+  font-size: 16px !important;
+}
+
+/* Highlight styles */
+.highlight-filled {
+  background-color: rgba(79, 70, 229, 0.05) !important;
+}
+
+.new-attribute {
+  background-color: rgba(79, 70, 229, 0.02) !important;
+}
+
+/* Reduce padding for the expand/collapse button cell */
+.MuiTableCell-root[padding="checkbox"] {
+  padding: 0 4px 0 8px;
+  width: 40px; /* Set a fixed width */
+}
+
+/* Ensure the button itself is properly centered */
+.MuiTableCell-root[padding="checkbox"] .MuiIconButton-root {
+  padding: 4px;
+  margin: 0;
+}
+
+/* More specific selector for the checkbox column */
+.MuiTable-root .MuiTableCell-root[padding="checkbox"] {
+  width: 32px !important;
+  padding: 0 !important;
+  min-width: 32px !important;
+}
+
+/* Adjust the expand/collapse button */
+.MuiTable-root .MuiTableCell-root[padding="checkbox"] .MuiIconButton-root {
+  padding: 4px !important;
+  margin: 0 !important;
+  width: 28px !important;
+  height: 28px !important;
+}
+
+/* Adjust the first data column (product name) */
+.MuiTable-root .MuiTableCell-root:nth-child(2) {
+  padding-left: 8px !important;
+}
+
+/* Specific styling for the expand button column */
+.MuiTableCell-root:first-child {
+  padding: 6px 0 6px 6px;
+  width: 40px;
+  min-width: 40px;
+  border-right: none;
+}
+
+/* Remove left padding from the product name column */
+.MuiTableCell-root:nth-child(2) {
+  padding-left: 0;
+}
+
+/* Adjust the icon button size */
+.MuiTableCell-root:first-child .MuiIconButton-root {
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+}
+
+/* Enhanced expanded row styling */
+.expanded-row-content {
+  padding: 8px 12px;
+  background-color: #f8fafc;
+  border-top: 1px solid #edf2f7;
+  border-bottom: 1px solid #edf2f7;
+}
+
+/* Grid layout for expanded content */
+.expanded-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+  margin-top: 0;
+}
+
+/* Individual detail field styling */
+.detail-field {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.detail-field:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+/* Detail field header styling */
+.detail-field-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  color: #4a5568;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+/* Detail field content styling */
+.detail-field-content {
+  color: #2d3748;
+  font-size: 0.813rem;
+  line-height: 1.3;
+}
+
+/* Empty state styling */
+.detail-field-empty {
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* Animation for expanding/collapsing */
+.MuiCollapse-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth transition for expand icon */
+.expand-icon {
+  transition: transform 0.3s ease;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Button styling within expanded content */
+.detail-field .MuiButton-root {
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+/* Status indicators */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.status-indicator.enhanced {
+  background-color: #ebf7ee;
+  color: #2f855a;
+}
+
+.status-indicator.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* Add these styles for the edit icon container */
+.detail-field {
+  position: relative;  /* Keep this */
+  padding-right: 36px !important; /* Add space for the icon */
+}
+
+/* Position both edit and save icons */
+.edit-icon {
+  position: absolute !important; /* Override Material-UI styles */
+  top: 8px !important;
+  right: 8px !important;
+  visibility: hidden;
+  cursor: pointer;
+  padding: 4px !important;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  z-index: 1; /* Ensure icon stays above other content */
+}
+
+/* Show icon on hover */
+.detail-field:hover .edit-icon {
+  visibility: visible;
+}
+
+/* When editing, always show the save icon */
+.detail-field.editing .edit-icon {
+  visibility: visible;
+}
+
+/* Style for the icons themselves */
+.edit-icon .MuiSvgIcon-root {
+  font-size: 18px; /* Make icons slightly smaller */
+}
+
+/* Adjust the Typography header to not overlap with icons */
+.detail-field .MuiTypography-subtitle2 {
+  padding-right: 28px;
+}

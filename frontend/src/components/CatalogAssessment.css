@@ -1,0 +1,237 @@
+.catalog-assessment {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.upload-section {
+  padding: 48px;
+  text-align: center;
+  background: var(--surface);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+}
+
+.overall-score-card {
+  padding: 32px;
+  text-align: center;
+  margin-bottom: 32px;
+  background: var(--surface);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
+}
+
+.overall-score {
+  position: relative;
+  display: inline-flex;
+  margin: 24px 0;
+}
+
+.overall-progress {
+  color: var(--primary) !important;
+}
+
+.overall-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-primary);
+}
+
+.score-grid {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.score-card {
+  padding: 24px;
+  height: 100%;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  transition: transform 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.score-card:hover {
+  transform: translateY(-2px);
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.score-title {
+  margin-bottom: 0 !important;
+  color: var(--text-primary);
+}
+
+.info-icon {
+  font-size: 20px !important;
+  color: var(--text-secondary) !important;
+  cursor: pointer;
+}
+
+.score-circle-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.score-circle {
+  color: var(--primary) !important;
+}
+
+.score-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-primary);
+}
+
+.score-bar {
+  margin: 16px 0 !important;
+}
+
+.score-bar .MuiLinearProgress-bar {
+  background-color: var(--primary);
+}
+
+.score-description {
+  color: var(--text-secondary);
+  margin-top: auto;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.score-grid .MuiGrid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .catalog-assessment {
+    padding: 16px;
+  }
+
+  .upload-section {
+    padding: 32px;
+  }
+
+  .overall-score-card {
+    padding: 24px;
+  }
+}
+
+.MuiTabs-root {
+  margin-bottom: 16px;
+}
+
+.MuiTab-root {
+  text-transform: none;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.MuiTab-root.Mui-selected {
+  color: var(--primary);
+}
+
+.MuiTabs-indicator {
+}
+
+/* Add these new styles */
+.recommendations-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.recommendation-card {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+}
+
+.recommendation-card:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.recommendation-content {
+  padding: 16px;
+}
+
+.recommendation-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.recommendation-text {
+  flex-grow: 1;
+}
+
+.recommendation-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recommendation-title {
+  margin-bottom: 8px !important;
+  color: var(--text-primary);
+}
+
+.recommendation-description {
+  color: var(--text-secondary);
+  margin: 8px 0 16px 0;
+  line-height: 1.6;
+}
+
+.recommendation-actions {
+  display: flex;
+  align-items: flex-start;
+}
+
+.fix-button {
+  white-space: nowrap;
+}
+
+.expand-button {
+  padding: 4px;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.expand-button.expanded {
+  transform: rotate(90deg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .recommendation-main {
+    flex-direction: column;
+  }
+
+  .recommendation-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+} 
