@@ -13,6 +13,12 @@ import {
   IconButton,
   Collapse,
   Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from '@mui/material';
 import UploadButton from './UploadButton';
 import LoadingSpinner from './LoadingSpinner';
@@ -83,11 +89,223 @@ function TabPanel({ children, value, index }) {
   );
 }
 
-function CatalogScores() {
+function CategoryScores() {
+  const [expandedRow, setExpandedRow] = useState(null);
+
+  const handleRowClick = (category) => {
+    setExpandedRow(expandedRow === category ? null : category);
+  };
+
+  const getScoreDescription = (score, metric) => {
+    if (score >= 85) return `Excellent ${metric.toLowerCase()} performance that exceeds industry standards`;
+    if (score >= 75) return `Good ${metric.toLowerCase()} performance with some room for improvement`;
+    if (score >= 65) return `Average ${metric.toLowerCase()} performance with significant improvement opportunities`;
+    return `Below average ${metric.toLowerCase()} performance that needs immediate attention`;
+  };
+
+  const categoryData = [
+    {
+      category: "Electronics",
+      overallAttributes: 84,
+      attributeRelevance: 78,
+      attributeConsistency: 72,
+      attributeImpact: 88,
+      keywords: 82,
+      imageQuality: 92,
+      competitiveBenchmark: 75,
+    },
+    {
+      category: "Apparel",
+      overallAttributes: 79,
+      attributeRelevance: 82,
+      attributeConsistency: 65,
+      attributeImpact: 85,
+      keywords: 77,
+      imageQuality: 88,
+      competitiveBenchmark: 73,
+    },
+    {
+      category: "Home Goods",
+      overallAttributes: 76,
+      attributeRelevance: 70,
+      attributeConsistency: 68,
+      attributeImpact: 82,
+      keywords: 75,
+      imageQuality: 85,
+      competitiveBenchmark: 69,
+    },
+    {
+      category: "Beauty",
+      overallAttributes: 88,
+      attributeRelevance: 85,
+      attributeConsistency: 80,
+      attributeImpact: 87,
+      keywords: 84,
+      imageQuality: 95,
+      competitiveBenchmark: 82,
+    },
+  ];
+
   return (
-    <Typography variant="body1" color="textSecondary">
-      Catalog scores content coming soon...
-    </Typography>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="category scores table">
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell>Category</TableCell>
+            <TableCell align="right">Overall Attributes</TableCell>
+            <TableCell align="right">Attribute Relevance</TableCell>
+            <TableCell align="right">Attribute Consistency</TableCell>
+            <TableCell align="right">Attribute Impact</TableCell>
+            <TableCell align="right">Keywords</TableCell>
+            <TableCell align="right">Image Quality</TableCell>
+            <TableCell align="right">Competitive Benchmark</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {categoryData.map((row) => (
+            <React.Fragment key={row.category}>
+              <TableRow
+                hover
+                onClick={() => handleRowClick(row.category)}
+                sx={{ 
+                  cursor: 'pointer',
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  '& > *': { borderBottom: 'unset' }
+                }}
+              >
+                <TableCell>
+                  <IconButton
+                    aria-label="expand row"
+                    size="small"
+                  >
+                    <ExpandMoreIcon 
+                      sx={{ 
+                        transform: expandedRow === row.category ? 'rotate(180deg)' : 'rotate(0)',
+                        transition: 'transform 0.2s'
+                      }}
+                    />
+                  </IconButton>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {row.category}
+                </TableCell>
+                <TableCell align="right">{row.overallAttributes}</TableCell>
+                <TableCell align="right">{row.attributeRelevance}</TableCell>
+                <TableCell align="right">{row.attributeConsistency}</TableCell>
+                <TableCell align="right">{row.attributeImpact}</TableCell>
+                <TableCell align="right">{row.keywords}</TableCell>
+                <TableCell align="right">{row.imageQuality}</TableCell>
+                <TableCell align="right">{row.competitiveBenchmark}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+                  <Collapse in={expandedRow === row.category} timeout="auto" unmountOnExit>
+                    <Box sx={{ margin: 2 }}>
+                      <Typography variant="h6" gutterBottom>
+                        Detailed Analysis for {row.category}
+                      </Typography>
+                      <Grid container spacing={3}>
+                        {[
+                          { title: 'Overall Attributes', score: row.overallAttributes },
+                          { title: 'Attribute Relevance', score: row.attributeRelevance },
+                          { title: 'Attribute Consistency', score: row.attributeConsistency },
+                          { title: 'Attribute Impact', score: row.attributeImpact },
+                          { title: 'Keywords', score: row.keywords },
+                          { title: 'Image Quality', score: row.imageQuality },
+                          { title: 'Competitive Benchmark', score: row.competitiveBenchmark }
+                        ].map((item) => (
+                          <Grid item xs={12} sm={6} md={4} key={item.title}>
+                            <Paper
+                              elevation={1}
+                              sx={{
+                                p: 2,
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 2,
+                                backgroundColor: 'background.default',
+                                minHeight: '250px',
+                                '& .MuiTypography-body2': {
+                                  overflow: 'hidden',
+                                  display: '-webkit-box',
+                                  WebkitLineClamp: 4,
+                                  WebkitBoxOrient: 'vertical',
+                                  textOverflow: 'ellipsis'
+                                }
+                              }}
+                            >
+                              <Typography variant="subtitle1" color="primary" fontWeight="medium">
+                                {item.title}
+                              </Typography>
+                              
+                              <Box 
+                                sx={{ 
+                                  position: 'relative', 
+                                  display: 'inline-flex', 
+                                  alignSelf: 'center',
+                                  my: 2
+                                }}
+                              >
+                                <CircularProgress
+                                  variant="determinate"
+                                  value={item.score}
+                                  size={80}
+                                  thickness={4}
+                                  sx={{
+                                    color: (theme) => {
+                                      if (item.score >= 85) return theme.palette.success.main;
+                                      if (item.score >= 75) return theme.palette.info.main;
+                                      if (item.score >= 65) return theme.palette.warning.main;
+                                      return theme.palette.error.main;
+                                    }
+                                  }}
+                                />
+                                <Box
+                                  sx={{
+                                    top: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                    right: 0,
+                                    position: 'absolute',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                  }}
+                                >
+                                  <Typography
+                                    variant="h6"
+                                    component="div"
+                                    color="text.secondary"
+                                  >
+                                    {item.score}
+                                  </Typography>
+                                </Box>
+                              </Box>
+
+                              <Typography 
+                                variant="body2" 
+                                color="text.secondary"
+                                sx={{ 
+                                  flexGrow: 1,
+                                  wordBreak: 'break-word'
+                                }}
+                              >
+                                {getScoreDescription(item.score, item.title)}
+                              </Typography>
+                            </Paper>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
+                  </Collapse>
+                </TableCell>
+              </TableRow>
+            </React.Fragment>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
 
@@ -313,7 +531,7 @@ function CatalogAssessment({ savedState, onStateChange }) {
               centered
             >
               <Tab label="Subscores" />
-              <Tab label="Catalog Scores" />
+              <Tab label="Category Scores" />
               <Tab label="AI Recommendations" />
             </Tabs>
           </Box>
@@ -322,7 +540,7 @@ function CatalogAssessment({ savedState, onStateChange }) {
             <SubScores scores={assessmentResult} />
           </TabPanel>
           <TabPanel value={activeTab} index={1}>
-            <CatalogScores />
+            <CategoryScores />
           </TabPanel>
           <TabPanel value={activeTab} index={2}>
             <AIRecommendations />

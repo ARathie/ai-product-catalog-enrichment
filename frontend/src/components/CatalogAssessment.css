@@ -234,4 +234,40 @@
     justify-content: flex-end;
     margin-top: 16px;
   }
-} 
+}
+
+.MuiTableRow-root.MuiTableRow-hover:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.MuiTableCell-root {
+  padding: 16px;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
+
+.MuiCollapse-wrapper {
+  background-color: #fafafa;
+  border-radius: 0 0 8px 8px;
+}
+
+.MuiTableRow-root.expanded {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  font-weight: 600;
+  background-color: #fafafa;
+}
+
+.MuiTableRow-hover:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.score-detail-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.score-detail-card:hover {
+  transform: translateY(-4px);
+}
+ 
