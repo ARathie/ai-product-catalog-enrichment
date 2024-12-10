@@ -7,6 +7,7 @@ import ProductPairings from './components/ProductPairings';
 
 function App() {
   const [activePage, setActivePage] = useState('Catalog Assessment');
+  const [activeSubPage, setActiveSubPage] = useState('by-product');
   const [assessmentState, setAssessmentState] = useState(null);
   const [enrichmentState, setEnrichmentState] = useState(null);
 
@@ -21,6 +22,7 @@ function App() {
         return <CatalogEnhancer 
           savedState={enrichmentState}
           onStateChange={setEnrichmentState}
+          activeSubPage={activeSubPage}
         />;
       case 'Product Pairings':
         return <ProductPairings />;
@@ -34,7 +36,12 @@ function App() {
 
   return (
     <div className="App">
-      <Sidebar activePage={activePage} setActivePage={setActivePage} />
+      <Sidebar 
+        activePage={activePage} 
+        setActivePage={setActivePage}
+        activeSubPage={activeSubPage}
+        setActiveSubPage={setActiveSubPage}
+      />
       <main className="main-content">
         {renderPage()}
       </main>

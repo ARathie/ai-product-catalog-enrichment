@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, CircularProgress, TextField } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
 import UploadButton from './UploadButton';
 import EnhancedTable from './EnhancedTable';
 import EnhanceOptionsModal from './EnhanceOptionsModal';
@@ -11,8 +9,10 @@ import Papa from 'papaparse';
 import './CatalogEnhancer.css';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DownloadIcon from '@mui/icons-material/Download';
+import CatalogEnhancerCategory from './CatalogEnhancerCategory';
+import CatalogEnhancerBrand from './CatalogEnhancerBrand';
 
-function CatalogEnhancer({ savedState, onStateChange }) {
+function CatalogEnhancer({ savedState, onStateChange, activeSubPage }) {
   const [uploadedData, setUploadedData] = useState(savedState?.uploadedData || []);
   const [productTable, setProductTable] = useState(savedState?.productTable || []);
   const [loading, setLoading] = useState(false);
@@ -139,7 +139,7 @@ function CatalogEnhancer({ savedState, onStateChange }) {
     setIsModalOpen(true);
   };
 
-  return (
+  const renderByProduct = () => (
     <div className="catalog-container">
       <div className="button-row">
         <TextField
@@ -198,6 +198,16 @@ function CatalogEnhancer({ savedState, onStateChange }) {
       />
     </div>
   );
+
+  switch (activeSubPage) {
+    case 'by-category':
+      return <CatalogEnhancerCategory savedState={savedState} onStateChange={onStateChange} />;
+    case 'by-brand':
+      return <CatalogEnhancerBrand savedState={savedState} onStateChange={onStateChange} />;
+    case 'by-product':
+    default:
+      return renderByProduct();
+  }
 }
 
 export default CatalogEnhancer;

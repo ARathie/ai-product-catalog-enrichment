@@ -116,3 +116,57 @@ body {
   display: flex;
   gap: 12px;
 }
+
+/* Add these styles to your existing CatalogEnhancer.css */
+.category-view, .brand-view {
+  display: flex;
+  height: 100%;
+  background: var(--background);
+}
+
+.sidebar-panel {
+  width: 300px;
+  padding: 20px;
+  border-right: 1px solid var(--border);
+  background: white;
+  height: 100%;
+}
+
+.content-panel {
+  flex: 1;
+  padding: 20px;
+  overflow: auto;
+}
+
+.MuiTreeItem-root {
+  padding: 4px 0;
+}
+
+.MuiTreeItem-content {
+  padding: 4px 8px !important;
+  border-radius: 4px;
+}
+
+.MuiTreeItem-label {
+  font-size: 0.9rem;
+}
+
+.MuiTreeItem-group {
+  margin-left: 16px !important;
+  padding-left: 8px !important;
+  border-left: 1px dashed var(--border);
+}
+
+.MuiListItem-root.selected {
+  background-color: var(--highlight) !important;
+  color: var(--primary);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
