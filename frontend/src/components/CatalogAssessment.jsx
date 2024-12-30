@@ -172,25 +172,20 @@ function ExpandableTableRow({ row, level = 0, columns }) {
           sx={{ 
             pl: paddingLeft + 2,
             position: 'relative',
-            width: '300px',
           }}
         >
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center', 
             gap: 1,
-            ml: isProduct ? 4 : 0,
-            maxWidth: '100%'
+            ml: isProduct ? 4 : 0
           }}>
             {(hasSubcategories || hasProducts) && (
               <IconButton
                 aria-label="expand row"
                 size="small"
                 onClick={() => setOpen(!open)}
-                sx={{ 
-                  ml: level > 0 ? 1 : 0,
-                  flexShrink: 0
-                }}
+                sx={{ ml: level > 0 ? 1 : 0 }}
               >
                 {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
               </IconButton>
@@ -200,12 +195,7 @@ function ExpandableTableRow({ row, level = 0, columns }) {
               sx={{
                 fontWeight: level === 0 ? 500 : 400,
                 fontSize: level === 0 ? '1rem' : '0.875rem',
-                color: level === 0 ? 'text.primary' : 'text.secondary',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                minWidth: 0,
-                flex: 1
+                color: level === 0 ? 'text.primary' : 'text.secondary'
               }}
             >
               {row.name}
@@ -619,7 +609,7 @@ function CategoryScores() {
       <Table aria-label="category scores table">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ width: '300px' }}>Category</TableCell>
+            <TableCell>Category</TableCell>
             {columns.map((column) => (
               <TableCell key={column} align="right">{column}</TableCell>
             ))}
