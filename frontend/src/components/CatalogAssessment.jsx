@@ -27,6 +27,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import WarningIcon from '@mui/icons-material/Warning';
 import './CatalogAssessment.css';
 
 function ScoreCard({ title, score, description }) {
@@ -92,61 +93,88 @@ function TabPanel({ children, value, index }) {
 }
 
 const ScoreCell = ({ score, metric }) => (
-  <TableCell align="right">
+  <TableCell align="center">
     <Tooltip title={getScoreDescription(score, metric)} arrow placement="top">
       <Box 
         sx={{ 
           position: 'relative', 
           display: 'inline-flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          gap: 1
         }}
       >
-        <CircularProgress
-          variant="determinate"
-          value={score}
-          size={40}
-          thickness={4}
-          sx={{
-            color: (theme) => {
-              if (score >= 85) return theme.palette.success.main;
-              if (score >= 75) return theme.palette.info.main;
-              if (score >= 65) return theme.palette.warning.main;
-              return theme.palette.error.main;
-            }
-          }}
-        />
-        <Box
-          sx={{
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            position: 'absolute',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography
-            variant="caption"
-            component="div"
-            color="text.secondary"
-            sx={{ fontSize: '0.8rem' }}
+        <Box sx={{ position: 'relative' }}>
+          <CircularProgress
+            variant="determinate"
+            value={score}
+            size={40}
+            thickness={4}
+            sx={{
+              color: (theme) => {
+                if (score < 70) return theme.palette.error.main;
+                if (score >= 85) return theme.palette.success.main;
+                if (score >= 75) return theme.palette.info.main;
+                return theme.palette.warning.main;
+              }
+            }}
+          />
+          <Box
+            sx={{
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+              position: 'absolute',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            {score}
-          </Typography>
+            <Typography
+              variant="caption"
+              component="div"
+              sx={{ 
+                fontSize: '0.8rem',
+                color: (theme) => score < 70 ? theme.palette.error.main : 'text.secondary'
+              }}
+            >
+              {score}
+            </Typography>
+          </Box>
         </Box>
+        {score < 70 && (
+          <Tooltip title="Needs attention" arrow>
+            <WarningIcon 
+              sx={{ 
+                color: 'error.main',
+                fontSize: '1.2rem',
+                animation: 'pulse 2s infinite',
+                '@keyframes pulse': {
+                  '0%': {
+                    opacity: 1,
+                  },
+                  '50%': {
+                    opacity: 0.5,
+                  },
+                  '100%': {
+                    opacity: 1,
+                  },
+                },
+              }} 
+            />
+          </Tooltip>
+        )}
       </Box>
     </Tooltip>
   </TableCell>
 );
 
 const getScoreDescription = (score, metric) => {
+  if (score < 70) return `Critical: ${metric.toLowerCase()} needs immediate attention`;
   if (score >= 85) return `Excellent ${metric.toLowerCase()} performance that exceeds industry standards`;
   if (score >= 75) return `Good ${metric.toLowerCase()} performance with some room for improvement`;
-  if (score >= 65) return `Average ${metric.toLowerCase()} performance with significant improvement opportunities`;
-  return `Below average ${metric.toLowerCase()} performance that needs immediate attention`;
+  return `Average ${metric.toLowerCase()} performance with improvement opportunities`;
 };
 
 function ExpandableTableRow({ row, level = 0, columns }) {
@@ -288,6 +316,7 @@ function ExpandableTableRow({ row, level = 0, columns }) {
 
 function CategoryScores() {
   const columns = [
+    'Overall',
     'Overall Attributes',
     'Attribute Relevance',
     'Attribute Consistency',
@@ -297,9 +326,23 @@ function CategoryScores() {
     'Competitive Benchmark'
   ];
 
+  const calculateOverall = (row) => {
+    const scores = [
+      row.overallattributes,
+      row.attributerelevance,
+      row.attributeconsistency,
+      row.attributeimpact,
+      row.keywords,
+      row.imagequality,
+      row.competitivebenchmark
+    ];
+    return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  };
+
   const categoryData = [
     {
       name: "Electronics",
+      overall: 82,
       overallattributes: 84,
       attributerelevance: 78,
       attributeconsistency: 72,
@@ -604,6 +647,26 @@ function CategoryScores() {
     }
   ];
 
+  const addOverallScores = (data) => {
+    return data.map(item => {
+      const itemWithOverall = {
+        ...item,
+        overall: calculateOverall(item)
+      };
+
+      if (itemWithOverall.subcategories) {
+        itemWithOverall.subcategories = addOverallScores(itemWithOverall.subcategories);
+      }
+      if (itemWithOverall.products) {
+        itemWithOverall.products = addOverallScores(itemWithOverall.products);
+      }
+
+      return itemWithOverall;
+    });
+  };
+
+  const dataWithOverall = addOverallScores(categoryData);
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="category scores table">
@@ -611,12 +674,12 @@ function CategoryScores() {
           <TableRow>
             <TableCell>Category</TableCell>
             {columns.map((column) => (
-              <TableCell key={column} align="right">{column}</TableCell>
+              <TableCell key={column} align="center">{column}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {categoryData.map((category) => (
+          {dataWithOverall.map((category) => (
             <ExpandableTableRow
               key={category.name}
               row={category}
