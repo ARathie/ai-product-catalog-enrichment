@@ -90,12 +90,6 @@ function TabPanel({ children, value, index }) {
 }
 
 function CategoryScores() {
-  const [expandedRow, setExpandedRow] = useState(null);
-
-  const handleRowClick = (category) => {
-    setExpandedRow(expandedRow === category ? null : category);
-  };
-
   const getScoreDescription = (score, metric) => {
     if (score >= 85) return `Excellent ${metric.toLowerCase()} performance that exceeds industry standards`;
     if (score >= 75) return `Good ${metric.toLowerCase()} performance with some room for improvement`;
@@ -146,12 +140,62 @@ function CategoryScores() {
     },
   ];
 
+  const ScoreCell = ({ score, metric }) => (
+    <TableCell align="right">
+      <Tooltip title={getScoreDescription(score, metric)} arrow placement="top">
+        <Box 
+          sx={{ 
+            position: 'relative', 
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <CircularProgress
+            variant="determinate"
+            value={score}
+            size={40}
+            thickness={4}
+            sx={{
+              color: (theme) => {
+                if (score >= 85) return theme.palette.success.main;
+                if (score >= 75) return theme.palette.info.main;
+                if (score >= 65) return theme.palette.warning.main;
+                return theme.palette.error.main;
+              }
+            }}
+          />
+          <Box
+            sx={{
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+              position: 'absolute',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography
+              variant="caption"
+              component="div"
+              color="text.secondary"
+              sx={{ fontSize: '0.8rem' }}
+            >
+              {score}
+            </Typography>
+          </Box>
+        </Box>
+      </Tooltip>
+    </TableCell>
+  );
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="category scores table">
         <TableHead>
           <TableRow>
-            <TableCell />
             <TableCell>Category</TableCell>
             <TableCell align="right">Overall Attributes</TableCell>
             <TableCell align="right">Attribute Relevance</TableCell>
@@ -164,144 +208,21 @@ function CategoryScores() {
         </TableHead>
         <TableBody>
           {categoryData.map((row) => (
-            <React.Fragment key={row.category}>
-              <TableRow
-                hover
-                onClick={() => handleRowClick(row.category)}
-                sx={{ 
-                  cursor: 'pointer',
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  '& > *': { borderBottom: 'unset' }
-                }}
-              >
-                <TableCell>
-                  <IconButton
-                    aria-label="expand row"
-                    size="small"
-                  >
-                    <ExpandMoreIcon 
-                      sx={{ 
-                        transform: expandedRow === row.category ? 'rotate(180deg)' : 'rotate(0)',
-                        transition: 'transform 0.2s'
-                      }}
-                    />
-                  </IconButton>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.category}
-                </TableCell>
-                <TableCell align="right">{row.overallAttributes}</TableCell>
-                <TableCell align="right">{row.attributeRelevance}</TableCell>
-                <TableCell align="right">{row.attributeConsistency}</TableCell>
-                <TableCell align="right">{row.attributeImpact}</TableCell>
-                <TableCell align="right">{row.keywords}</TableCell>
-                <TableCell align="right">{row.imageQuality}</TableCell>
-                <TableCell align="right">{row.competitiveBenchmark}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
-                  <Collapse in={expandedRow === row.category} timeout="auto" unmountOnExit>
-                    <Box sx={{ margin: 2 }}>
-                      <Typography variant="h6" gutterBottom>
-                        Detailed Analysis for {row.category}
-                      </Typography>
-                      <Grid container spacing={3}>
-                        {[
-                          { title: 'Overall Attributes', score: row.overallAttributes },
-                          { title: 'Attribute Relevance', score: row.attributeRelevance },
-                          { title: 'Attribute Consistency', score: row.attributeConsistency },
-                          { title: 'Attribute Impact', score: row.attributeImpact },
-                          { title: 'Keywords', score: row.keywords },
-                          { title: 'Image Quality', score: row.imageQuality },
-                          { title: 'Competitive Benchmark', score: row.competitiveBenchmark }
-                        ].map((item) => (
-                          <Grid item xs={12} sm={6} md={4} key={item.title}>
-                            <Paper
-                              elevation={1}
-                              sx={{
-                                p: 2,
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 2,
-                                backgroundColor: 'background.default',
-                                minHeight: '250px',
-                                '& .MuiTypography-body2': {
-                                  overflow: 'hidden',
-                                  display: '-webkit-box',
-                                  WebkitLineClamp: 4,
-                                  WebkitBoxOrient: 'vertical',
-                                  textOverflow: 'ellipsis'
-                                }
-                              }}
-                            >
-                              <Typography variant="subtitle1" color="primary" fontWeight="medium">
-                                {item.title}
-                              </Typography>
-                              
-                              <Box 
-                                sx={{ 
-                                  position: 'relative', 
-                                  display: 'inline-flex', 
-                                  alignSelf: 'center',
-                                  my: 2
-                                }}
-                              >
-                                <CircularProgress
-                                  variant="determinate"
-                                  value={item.score}
-                                  size={80}
-                                  thickness={4}
-                                  sx={{
-                                    color: (theme) => {
-                                      if (item.score >= 85) return theme.palette.success.main;
-                                      if (item.score >= 75) return theme.palette.info.main;
-                                      if (item.score >= 65) return theme.palette.warning.main;
-                                      return theme.palette.error.main;
-                                    }
-                                  }}
-                                />
-                                <Box
-                                  sx={{
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    position: 'absolute',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                  }}
-                                >
-                                  <Typography
-                                    variant="h6"
-                                    component="div"
-                                    color="text.secondary"
-                                  >
-                                    {item.score}
-                                  </Typography>
-                                </Box>
-                              </Box>
-
-                              <Typography 
-                                variant="body2" 
-                                color="text.secondary"
-                                sx={{ 
-                                  flexGrow: 1,
-                                  wordBreak: 'break-word'
-                                }}
-                              >
-                                {getScoreDescription(item.score, item.title)}
-                              </Typography>
-                            </Paper>
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </Box>
-                  </Collapse>
-                </TableCell>
-              </TableRow>
-            </React.Fragment>
+            <TableRow
+              key={row.category}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.category}
+              </TableCell>
+              <ScoreCell score={row.overallAttributes} metric="Overall Attributes" />
+              <ScoreCell score={row.attributeRelevance} metric="Attribute Relevance" />
+              <ScoreCell score={row.attributeConsistency} metric="Attribute Consistency" />
+              <ScoreCell score={row.attributeImpact} metric="Attribute Impact" />
+              <ScoreCell score={row.keywords} metric="Keywords" />
+              <ScoreCell score={row.imageQuality} metric="Image Quality" />
+              <ScoreCell score={row.competitiveBenchmark} metric="Competitive Benchmark" />
+            </TableRow>
           ))}
         </TableBody>
       </Table>
