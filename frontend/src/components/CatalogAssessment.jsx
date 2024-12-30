@@ -25,6 +25,8 @@ import LoadingSpinner from './LoadingSpinner';
 import InfoIcon from '@mui/icons-material/Info';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './CatalogAssessment.css';
 
 function ScoreCard({ title, score, description }) {
@@ -89,140 +91,547 @@ function TabPanel({ children, value, index }) {
   );
 }
 
+const ScoreCell = ({ score, metric }) => (
+  <TableCell align="right">
+    <Tooltip title={getScoreDescription(score, metric)} arrow placement="top">
+      <Box 
+        sx={{ 
+          position: 'relative', 
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <CircularProgress
+          variant="determinate"
+          value={score}
+          size={40}
+          thickness={4}
+          sx={{
+            color: (theme) => {
+              if (score >= 85) return theme.palette.success.main;
+              if (score >= 75) return theme.palette.info.main;
+              if (score >= 65) return theme.palette.warning.main;
+              return theme.palette.error.main;
+            }
+          }}
+        />
+        <Box
+          sx={{
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            position: 'absolute',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography
+            variant="caption"
+            component="div"
+            color="text.secondary"
+            sx={{ fontSize: '0.8rem' }}
+          >
+            {score}
+          </Typography>
+        </Box>
+      </Box>
+    </Tooltip>
+  </TableCell>
+);
+
+const getScoreDescription = (score, metric) => {
+  if (score >= 85) return `Excellent ${metric.toLowerCase()} performance that exceeds industry standards`;
+  if (score >= 75) return `Good ${metric.toLowerCase()} performance with some room for improvement`;
+  if (score >= 65) return `Average ${metric.toLowerCase()} performance with significant improvement opportunities`;
+  return `Below average ${metric.toLowerCase()} performance that needs immediate attention`;
+};
+
+function ExpandableTableRow({ row, level = 0, columns }) {
+  const [open, setOpen] = useState(false);
+  const hasSubcategories = row.subcategories?.length > 0;
+  const hasProducts = row.products?.length > 0;
+  const isProduct = !hasSubcategories && !hasProducts;
+  const paddingLeft = level * 3;
+
+  return (
+    <>
+      <TableRow
+        sx={{
+          '& > *': { borderBottom: 'unset' },
+          backgroundColor: open ? (
+            level === 1 ? 'rgba(0, 0, 0, 0.04)' : 
+            level === 2 ? 'rgba(0, 0, 0, 0.08)' : 
+            'inherit'
+          ) : 'inherit'
+        }}
+      >
+        <TableCell 
+          sx={{ 
+            pl: paddingLeft + 2,
+            position: 'relative',
+            width: '300px',
+          }}
+        >
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 1,
+            ml: isProduct ? 4 : 0,
+            maxWidth: '100%'
+          }}>
+            {(hasSubcategories || hasProducts) && (
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={() => setOpen(!open)}
+                sx={{ 
+                  ml: level > 0 ? 1 : 0,
+                  flexShrink: 0
+                }}
+              >
+                {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+            )}
+            <Typography
+              component="span"
+              sx={{
+                fontWeight: level === 0 ? 500 : 400,
+                fontSize: level === 0 ? '1rem' : '0.875rem',
+                color: level === 0 ? 'text.primary' : 'text.secondary',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                minWidth: 0,
+                flex: 1
+              }}
+            >
+              {row.name}
+            </Typography>
+          </Box>
+        </TableCell>
+        {columns.map((column) => (
+          <ScoreCell 
+            key={column} 
+            score={row[column.toLowerCase().replace(/\s+/g, '')]} 
+            metric={column}
+          />
+        ))}
+      </TableRow>
+      {open && (hasSubcategories || hasProducts) && (
+        <TableRow>
+          <TableCell 
+            colSpan={columns.length + 1} 
+            sx={{ 
+              p: 0,
+              position: 'relative',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: `${paddingLeft + 2}px`,
+                width: '2px',
+                backgroundColor: 'rgba(0, 0, 0, 0.12)',
+                zIndex: 1,
+                display: level === 0 ? 'block' : 'none'
+              },
+              ...(level === 1 && {
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  left: `${paddingLeft + 5}px`,
+                  width: '2px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.12)',
+                  zIndex: 1,
+                  display: 'block'
+                }
+              })
+            }}
+          >
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box>
+                <Table 
+                  size="small" 
+                  sx={{
+                    '& td, & th': {
+                      py: 1.5,
+                      px: 2,
+                      borderBottom: '1px solid rgba(224, 224, 224, 1)',
+                    },
+                    '& tr:last-child td': {
+                      borderBottom: 0
+                    }
+                  }}
+                >
+                  <TableBody>
+                    {row.subcategories?.map((subcategory) => (
+                      <ExpandableTableRow
+                        key={subcategory.name}
+                        row={subcategory}
+                        level={level + 1}
+                        columns={columns}
+                      />
+                    ))}
+                    {row.products?.map((product) => (
+                      <ExpandableTableRow
+                        key={product.name}
+                        row={product}
+                        level={level + 1}
+                        columns={columns}
+                      />
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      )}
+    </>
+  );
+}
+
 function CategoryScores() {
-  const getScoreDescription = (score, metric) => {
-    if (score >= 85) return `Excellent ${metric.toLowerCase()} performance that exceeds industry standards`;
-    if (score >= 75) return `Good ${metric.toLowerCase()} performance with some room for improvement`;
-    if (score >= 65) return `Average ${metric.toLowerCase()} performance with significant improvement opportunities`;
-    return `Below average ${metric.toLowerCase()} performance that needs immediate attention`;
-  };
+  const columns = [
+    'Overall Attributes',
+    'Attribute Relevance',
+    'Attribute Consistency',
+    'Attribute Impact',
+    'Keywords',
+    'Image Quality',
+    'Competitive Benchmark'
+  ];
 
   const categoryData = [
     {
-      category: "Electronics",
-      overallAttributes: 84,
-      attributeRelevance: 78,
-      attributeConsistency: 72,
-      attributeImpact: 88,
+      name: "Electronics",
+      overallattributes: 84,
+      attributerelevance: 78,
+      attributeconsistency: 72,
+      attributeimpact: 88,
       keywords: 82,
-      imageQuality: 92,
-      competitiveBenchmark: 75,
+      imagequality: 92,
+      competitivebenchmark: 75,
+      subcategories: [
+        {
+          name: "Smartphones",
+          overallattributes: 86,
+          attributerelevance: 82,
+          attributeconsistency: 75,
+          attributeimpact: 90,
+          keywords: 85,
+          imagequality: 94,
+          competitivebenchmark: 78,
+          products: [
+            {
+              name: "iPhone 13 Pro",
+              overallattributes: 88,
+              attributerelevance: 85,
+              attributeconsistency: 78,
+              attributeimpact: 92,
+              keywords: 87,
+              imagequality: 95,
+              competitivebenchmark: 80
+            },
+            {
+              name: "Samsung Galaxy S21",
+              overallattributes: 87,
+              attributerelevance: 83,
+              attributeconsistency: 76,
+              attributeimpact: 91,
+              keywords: 86,
+              imagequality: 93,
+              competitivebenchmark: 79
+            }
+          ]
+        },
+        {
+          name: "Laptops",
+          overallattributes: 82,
+          attributerelevance: 76,
+          attributeconsistency: 70,
+          attributeimpact: 86,
+          keywords: 80,
+          imagequality: 90,
+          competitivebenchmark: 73,
+          products: [
+            {
+              name: "MacBook Pro 16",
+              overallattributes: 84,
+              attributerelevance: 78,
+              attributeconsistency: 72,
+              attributeimpact: 88,
+              keywords: 82,
+              imagequality: 92,
+              competitivebenchmark: 75
+            },
+            {
+              name: "Dell XPS 15",
+              overallattributes: 80,
+              attributerelevance: 74,
+              attributeconsistency: 68,
+              attributeimpact: 84,
+              keywords: 78,
+              imagequality: 88,
+              competitivebenchmark: 71
+            }
+          ]
+        }
+      ]
     },
     {
-      category: "Apparel",
-      overallAttributes: 79,
-      attributeRelevance: 82,
-      attributeConsistency: 65,
-      attributeImpact: 85,
+      name: "Apparel",
+      overallattributes: 79,
+      attributerelevance: 82,
+      attributeconsistency: 65,
+      attributeimpact: 85,
       keywords: 77,
-      imageQuality: 88,
-      competitiveBenchmark: 73,
+      imagequality: 88,
+      competitivebenchmark: 73,
+      subcategories: [
+        {
+          name: "Men's Clothing",
+          overallattributes: 80,
+          attributerelevance: 83,
+          attributeconsistency: 66,
+          attributeimpact: 86,
+          keywords: 78,
+          imagequality: 89,
+          competitivebenchmark: 74,
+          products: [
+            {
+              name: "Classic Fit Dress Shirt",
+              overallattributes: 82,
+              attributerelevance: 85,
+              attributeconsistency: 68,
+              attributeimpact: 88,
+              keywords: 80,
+              imagequality: 91,
+              competitivebenchmark: 76
+            },
+            {
+              name: "Slim Fit Chinos",
+              overallattributes: 78,
+              attributerelevance: 81,
+              attributeconsistency: 64,
+              attributeimpact: 84,
+              keywords: 76,
+              imagequality: 87,
+              competitivebenchmark: 72
+            }
+          ]
+        },
+        {
+          name: "Women's Clothing",
+          overallattributes: 78,
+          attributerelevance: 81,
+          attributeconsistency: 64,
+          attributeimpact: 84,
+          keywords: 76,
+          imagequality: 87,
+          competitivebenchmark: 72,
+          products: [
+            {
+              name: "Floral Summer Dress",
+              overallattributes: 80,
+              attributerelevance: 83,
+              attributeconsistency: 66,
+              attributeimpact: 86,
+              keywords: 78,
+              imagequality: 89,
+              competitivebenchmark: 74
+            },
+            {
+              name: "High-Waist Jeans",
+              overallattributes: 76,
+              attributerelevance: 79,
+              attributeconsistency: 62,
+              attributeimpact: 82,
+              keywords: 74,
+              imagequality: 85,
+              competitivebenchmark: 70
+            }
+          ]
+        }
+      ]
     },
     {
-      category: "Home Goods",
-      overallAttributes: 76,
-      attributeRelevance: 70,
-      attributeConsistency: 68,
-      attributeImpact: 82,
+      name: "Home Goods",
+      overallattributes: 76,
+      attributerelevance: 70,
+      attributeconsistency: 68,
+      attributeimpact: 82,
       keywords: 75,
-      imageQuality: 85,
-      competitiveBenchmark: 69,
+      imagequality: 85,
+      competitivebenchmark: 69,
+      subcategories: [
+        {
+          name: "Furniture",
+          overallattributes: 77,
+          attributerelevance: 71,
+          attributeconsistency: 69,
+          attributeimpact: 83,
+          keywords: 76,
+          imagequality: 86,
+          competitivebenchmark: 70,
+          products: [
+            {
+              name: "Modern Sofa Set",
+              overallattributes: 79,
+              attributerelevance: 73,
+              attributeconsistency: 71,
+              attributeimpact: 85,
+              keywords: 78,
+              imagequality: 88,
+              competitivebenchmark: 72
+            },
+            {
+              name: "Dining Table Set",
+              overallattributes: 75,
+              attributerelevance: 69,
+              attributeconsistency: 67,
+              attributeimpact: 81,
+              keywords: 74,
+              imagequality: 84,
+              competitivebenchmark: 68
+            }
+          ]
+        },
+        {
+          name: "Kitchen",
+          overallattributes: 75,
+          attributerelevance: 69,
+          attributeconsistency: 67,
+          attributeimpact: 81,
+          keywords: 74,
+          imagequality: 84,
+          competitivebenchmark: 68,
+          products: [
+            {
+              name: "Cookware Set",
+              overallattributes: 77,
+              attributerelevance: 71,
+              attributeconsistency: 69,
+              attributeimpact: 83,
+              keywords: 76,
+              imagequality: 86,
+              competitivebenchmark: 70
+            },
+            {
+              name: "Kitchen Appliance Bundle",
+              overallattributes: 73,
+              attributerelevance: 67,
+              attributeconsistency: 65,
+              attributeimpact: 79,
+              keywords: 72,
+              imagequality: 82,
+              competitivebenchmark: 66
+            }
+          ]
+        }
+      ]
     },
     {
-      category: "Beauty",
-      overallAttributes: 88,
-      attributeRelevance: 85,
-      attributeConsistency: 80,
-      attributeImpact: 87,
+      name: "Beauty",
+      overallattributes: 88,
+      attributerelevance: 85,
+      attributeconsistency: 80,
+      attributeimpact: 87,
       keywords: 84,
-      imageQuality: 95,
-      competitiveBenchmark: 82,
-    },
+      imagequality: 95,
+      competitivebenchmark: 82,
+      subcategories: [
+        {
+          name: "Skincare",
+          overallattributes: 90,
+          attributerelevance: 87,
+          attributeconsistency: 82,
+          attributeimpact: 89,
+          keywords: 86,
+          imagequality: 97,
+          competitivebenchmark: 84,
+          products: [
+            {
+              name: "Anti-Aging Serum",
+              overallattributes: 92,
+              attributerelevance: 89,
+              attributeconsistency: 84,
+              attributeimpact: 91,
+              keywords: 88,
+              imagequality: 99,
+              competitivebenchmark: 86
+            },
+            {
+              name: "Hydrating Moisturizer",
+              overallattributes: 88,
+              attributerelevance: 85,
+              attributeconsistency: 80,
+              attributeimpact: 87,
+              keywords: 84,
+              imagequality: 95,
+              competitivebenchmark: 82
+            }
+          ]
+        },
+        {
+          name: "Makeup",
+          overallattributes: 86,
+          attributerelevance: 83,
+          attributeconsistency: 78,
+          attributeimpact: 85,
+          keywords: 82,
+          imagequality: 93,
+          competitivebenchmark: 80,
+          products: [
+            {
+              name: "Long-Wear Foundation",
+              overallattributes: 88,
+              attributerelevance: 85,
+              attributeconsistency: 80,
+              attributeimpact: 87,
+              keywords: 84,
+              imagequality: 95,
+              competitivebenchmark: 82
+            },
+            {
+              name: "Eyeshadow Palette",
+              overallattributes: 84,
+              attributerelevance: 81,
+              attributeconsistency: 76,
+              attributeimpact: 83,
+              keywords: 80,
+              imagequality: 91,
+              competitivebenchmark: 78
+            }
+          ]
+        }
+      ]
+    }
   ];
-
-  const ScoreCell = ({ score, metric }) => (
-    <TableCell align="right">
-      <Tooltip title={getScoreDescription(score, metric)} arrow placement="top">
-        <Box 
-          sx={{ 
-            position: 'relative', 
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <CircularProgress
-            variant="determinate"
-            value={score}
-            size={40}
-            thickness={4}
-            sx={{
-              color: (theme) => {
-                if (score >= 85) return theme.palette.success.main;
-                if (score >= 75) return theme.palette.info.main;
-                if (score >= 65) return theme.palette.warning.main;
-                return theme.palette.error.main;
-              }
-            }}
-          />
-          <Box
-            sx={{
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-              position: 'absolute',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography
-              variant="caption"
-              component="div"
-              color="text.secondary"
-              sx={{ fontSize: '0.8rem' }}
-            >
-              {score}
-            </Typography>
-          </Box>
-        </Box>
-      </Tooltip>
-    </TableCell>
-  );
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="category scores table">
+      <Table aria-label="category scores table">
         <TableHead>
           <TableRow>
-            <TableCell>Category</TableCell>
-            <TableCell align="right">Overall Attributes</TableCell>
-            <TableCell align="right">Attribute Relevance</TableCell>
-            <TableCell align="right">Attribute Consistency</TableCell>
-            <TableCell align="right">Attribute Impact</TableCell>
-            <TableCell align="right">Keywords</TableCell>
-            <TableCell align="right">Image Quality</TableCell>
-            <TableCell align="right">Competitive Benchmark</TableCell>
+            <TableCell sx={{ width: '300px' }}>Category</TableCell>
+            {columns.map((column) => (
+              <TableCell key={column} align="right">{column}</TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {categoryData.map((row) => (
-            <TableRow
-              key={row.category}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.category}
-              </TableCell>
-              <ScoreCell score={row.overallAttributes} metric="Overall Attributes" />
-              <ScoreCell score={row.attributeRelevance} metric="Attribute Relevance" />
-              <ScoreCell score={row.attributeConsistency} metric="Attribute Consistency" />
-              <ScoreCell score={row.attributeImpact} metric="Attribute Impact" />
-              <ScoreCell score={row.keywords} metric="Keywords" />
-              <ScoreCell score={row.imageQuality} metric="Image Quality" />
-              <ScoreCell score={row.competitiveBenchmark} metric="Competitive Benchmark" />
-            </TableRow>
+          {categoryData.map((category) => (
+            <ExpandableTableRow
+              key={category.name}
+              row={category}
+              columns={columns}
+            />
           ))}
         </TableBody>
       </Table>
