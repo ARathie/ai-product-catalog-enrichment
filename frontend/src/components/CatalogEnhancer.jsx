@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, CircularProgress, TextField } from '@mui/material';
+import { Button, CircularProgress, TextField, Typography, Chip } from '@mui/material';
 import UploadButton from './UploadButton';
 import EnhancedTable from './EnhancedTable';
 import EnhanceOptionsModal from './EnhanceOptionsModal';
@@ -11,10 +11,12 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DownloadIcon from '@mui/icons-material/Download';
 import CatalogEnhancerCategory from './CatalogEnhancerCategory';
 import CatalogEnhancerBrand from './CatalogEnhancerBrand';
+import SelectionSummary from './SelectionSummary';
 
 function CatalogEnhancer({ savedState, onStateChange, activeSubPage }) {
   const [uploadedData, setUploadedData] = useState(savedState?.uploadedData || []);
   const [productTable, setProductTable] = useState(savedState?.productTable || []);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,13 +27,15 @@ function CatalogEnhancer({ savedState, onStateChange, activeSubPage }) {
     analyzeProductImages: false,
     additionalInstructions: ''
   });
+  const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
     onStateChange({
       uploadedData,
-      productTable
+      productTable,
+      selectedItems
     });
-  }, [uploadedData, productTable, onStateChange]);
+  }, [uploadedData, productTable, selectedItems, onStateChange]);
 
   const handleEnhance = (file) => {
     setUploadedData([]);
@@ -139,36 +143,85 @@ function CatalogEnhancer({ savedState, onStateChange, activeSubPage }) {
     setIsModalOpen(true);
   };
 
+  const handleSelectionChange = (selectedIds) => {
+    setSelectedItems(selectedIds);
+  };
+
+  const getSelectedProducts = () => {
+    return productTable.filter(product => 
+      selectedItems.includes(product.product_id)
+    );
+  };
+
+  const handleNext = () => {
+    setShowSummary(true);
+  };
+
+  const handleBack = () => {
+    setShowSummary(false);
+  };
+
+  if (showSummary) {
+    return (
+      <SelectionSummary 
+        selectedProducts={getSelectedProducts()}
+        onBack={handleBack}
+        selectedItems={selectedItems}
+        onSelectionChange={handleSelectionChange}
+      />
+    );
+  }
+
   const renderByProduct = () => (
     <div className="catalog-container">
       <div className="button-row">
-        <TextField
-          label="Search"
-          variant="outlined"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginRight: '16px' }}
-        />
+        <div className="search-and-selection">
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ marginRight: '16px' }}
+          />
+          {selectedItems.length > 0 && (
+            <Chip
+              label={`${selectedItems.length} item${selectedItems.length === 1 ? '' : 's'} selected`}
+              color="primary"
+              style={{ marginRight: '16px' }}
+            />
+          )}
+        </div>
         
         <div className="button-group">
           <UploadButton onUpload={handleEnhance} />
           {productTable && productTable.length > 0 && (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleChangeOptions}
-            >
-              <SettingsIcon />
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleChangeOptions}
+              >
+                <SettingsIcon />
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleExport}
+                disabled={!productTable || productTable.length === 0}
+              >
+                <DownloadIcon />
+              </Button>
+              {selectedItems.length > 0 && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                >
+                  Next
+                </Button>
+              )}
+            </>
           )}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleExport}
-            disabled={!productTable || productTable.length === 0}
-          >
-            <DownloadIcon />
-          </Button>
         </div>
       </div>
 
@@ -184,6 +237,8 @@ function CatalogEnhancer({ savedState, onStateChange, activeSubPage }) {
               initialData={uploadedData}
               enhancedData={productTable}
               setEnhancedData={setProductTable}
+              selectedItems={selectedItems}
+              onSelectionChange={handleSelectionChange}
             />
           </div>
         )

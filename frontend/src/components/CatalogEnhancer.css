@@ -170,3 +170,42 @@ body {
   color: var(--text-secondary);
   font-size: 1.1rem;
 }
+
+.search-and-selection {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.selection-summary {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.selection-summary .header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.selection-summary .MuiListItem-root {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 16px;
+}
+
+.selection-summary .MuiListItem-root:last-child {
+  border-bottom: none;
+}

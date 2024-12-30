@@ -13,7 +13,8 @@ import {
   Typography,
   TextField,
   Grid,
-  Button
+  Button,
+  Checkbox
 } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -23,7 +24,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import './EnhancedTable.css';
 
-function EnhancedTable({ initialData, enhancedData, setEnhancedData }) {
+function EnhancedTable({
+  initialData,
+  enhancedData,
+  setEnhancedData,
+  selectedItems,
+  onSelectionChange
+}) {
   const [expandedRow, setExpandedRow] = useState(null);
   const [editingField, setEditingField] = useState(null);
 
@@ -68,11 +75,42 @@ function EnhancedTable({ initialData, enhancedData, setEnhancedData }) {
     setEditingField(null);
   };
 
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      const newSelected = enhancedData.map((item) => item.product_id);
+      onSelectionChange(newSelected);
+    } else {
+      onSelectionChange([]);
+    }
+  };
+
+  const handleSelectItem = (id) => {
+    const selectedIndex = selectedItems.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = [...selectedItems, id];
+    } else {
+      newSelected = selectedItems.filter((itemId) => itemId !== id);
+    }
+
+    onSelectionChange(newSelected);
+  };
+
+  const isSelected = (id) => selectedItems.indexOf(id) !== -1;
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="enhanced catalog table" size="small">
         <TableHead>
           <TableRow>
+            <TableCell padding="checkbox">
+              <Checkbox
+                indeterminate={selectedItems.length > 0 && selectedItems.length < enhancedData.length}
+                checked={selectedItems.length === enhancedData.length}
+                onChange={handleSelectAll}
+              />
+            </TableCell>
             <TableCell 
               style={{ 
                 width: '40px', 
@@ -93,9 +131,45 @@ function EnhancedTable({ initialData, enhancedData, setEnhancedData }) {
         <TableBody>
           {enhancedData.map((row, index) => {
             const initial = initialData[index] || {};
+            const isItemSelected = selectedItems.includes(row.product_id);
+            
             return (
               <React.Fragment key={row.product_id}>
-                <TableRow>
+                <TableRow
+                  selected={isItemSelected}
+                  onClick={(e) => {
+                    if (!e.target.closest('button') && !e.target.closest('.MuiIconButton-root')) {
+                      const selectedIndex = selectedItems.indexOf(row.product_id);
+                      let newSelected = [];
+
+                      if (selectedIndex === -1) {
+                        newSelected = [...selectedItems, row.product_id];
+                      } else {
+                        newSelected = selectedItems.filter(id => id !== row.product_id);
+                      }
+
+                      onSelectionChange(newSelected);
+                    }
+                  }}
+                  hover
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox 
+                      checked={isItemSelected}
+                      onChange={(e) => {
+                        const selectedIndex = selectedItems.indexOf(row.product_id);
+                        let newSelected = [];
+
+                        if (selectedIndex === -1) {
+                          newSelected = [...selectedItems, row.product_id];
+                        } else {
+                          newSelected = selectedItems.filter(id => id !== row.product_id);
+                        }
+
+                        onSelectionChange(newSelected);
+                      }}
+                    />
+                  </TableCell>
                   <TableCell 
                     style={{ 
                       width: '40px', 
