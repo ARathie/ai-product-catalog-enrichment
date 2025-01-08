@@ -1,4 +1,4 @@
-# AI Product Catalog Scroring and Enrichment
+# AI Product Catalog Scoring and Enrichment
 
 This project provides an AI-powered solution for evaluating and enhancing e-commerce product catalogs. It addresses two critical challenges faced by online retailers:
 
